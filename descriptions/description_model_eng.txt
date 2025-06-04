@@ -1,0 +1,52 @@
+▪ Project Title: ViLD-based Inter-Floor Noise Audio Classification Model Development
+
+▪ Development Period: March 2025 – June 2025
+▪ Developer: Sujin Ahn
+
+1. Project Overview and Background
+   Inter-floor noise in apartment living is a significant source of social conflict. Due to the ambiguous legal definitions and lack of physical solutions, a smart audio classification system capable of detecting and distinguishing such noise is highly desirable. This project aims to develop a semi-supervised audio classification model capable of identifying inter-floor noise among various indoor noises.
+
+Inspired by the ViLD (Vision-Language Distillation) architecture, I extended the concept to the audio-text domain. Given the scarcity of labeled data, I employed a teacher-student semi-supervised learning strategy to effectively utilize both labeled and unlabeled data.
+
+2. Motivation and Data Representation Rationale
+   Raw audio signals in the time domain contain all sound information but also a vast amount of irrelevant details. To reduce dimensionality and highlight perceptually relevant features, frequency-domain representations are essential.
+
+Specifically, we used Mel Spectrograms, which reflect human auditory perception by emphasizing lower frequencies more than higher ones. This transformation allows the model to learn audio features in a manner closer to how humans perceive noise. Thus, all audio data in this project were converted to mel spectrograms and treated as image-like inputs to the audio embedding model (SimpleAudioEncoder).
+
+3. Initial Experiment - Soft Label-Based Semi-Supervised Learning
+   The project began with a soft label-based semi-supervised learning approach inspired by ViLD. Text prompts (e.g., "thumping sound", "background noise") were embedded using SentenceTransformer, and mel spectrograms were embedded using SimpleAudioEncoder. Cosine similarity between the embeddings was used to generate soft labels, which were then used to train a student model.
+
+This approach favored generalization and zero-shot learning without explicit labels. However, I encountered the following issues:
+
+◽ Soft labels introduced ambiguity in binary classification tasks.
+◽ While training loss decreased, validation metrics such as accuracy, precision, and recall did not improve.
+◽ The combination of unlabeled data and noisy soft labels caused unstable student convergence.
+
+4. Structural Shift – Supervised Learning with Hard Labels
+   To resolve the above issues, I transitioned to a supervised structure using hard labels—a decision informed by repeated trial and error and deep investigation.
+
+◽ The teacher model still used SentenceTransformer but only returned the top-1 class index (argmax) as the hard label.
+◽ The student model employed softmax outputs and CrossEntropyLoss for explicit supervised learning.
+◽ Each audio segment was assumed to have exactly one correct class, improving interpretability and evaluation (e.g., confusion matrix, F1 score).
+◽ All inputs were normalized to a tensor shape of (1,1,64,101) via `normalize_mel_shape()` to ensure training stability.
+
+Post-transition, we observed faster loss convergence and significant improvements in evaluation metrics. EarlyStopping worked effectively, and confusion matrix visualizations showed dramatic performance gains.
+
+5. Unlabeled Data and mark3 Planning
+   Currently, unlabeled audio data are excluded from training but preserved for future use in mark3 experiments.
+
+◽ In mark3, a teacher trained only on labeled data will infer soft labels for unlabeled data.
+◽ These pseudo-labels will be saved in ‘soft_labels_mark3.pkl’ and used by the student for mimicry training.
+◽ Future directions include consistency training and pseudo-label filtering.
+
+6. Conclusion and Future Directions
+   This project goes beyond model implementation—it lays the foundation for a practical inter-floor noise recognition system. The shift from soft to hard labels after identifying the limitations of soft label learning represents a critical strategic pivot based on experimental insight.
+
+The current mark2.1.2 structure serves as a stable baseline, with plans to:
+
+◽ Complete mark3 with semi-supervised learning
+◽ Optimize the use of unlabeled data
+◽ Expand to multi-label classification
+◽ Test real-time classification in mobile environments
+
+This work is significant not only as a research project but also as a real-world application of AI to solve pressing social issues. Given its rigor, adaptability, and originality, the project holds potential for academic publication or intellectual property development.
