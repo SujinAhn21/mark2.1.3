@@ -56,7 +56,7 @@ def custom_collate(batch):
     mels = torch.stack(mels, dim=0)
     return mels, labels
 
-def train_teacher(seed_value=42, mark_version="mark2.1.2"):
+def train_teacher(seed_value=42, mark_version="mark2.1.3"):
     set_seed(seed_value)
     config = AudioViLDConfig(mark_version=mark_version)
     parser = AudioParser(config, segment_mode=True)  # 선택적 세그먼트 모드 적용
@@ -188,6 +188,6 @@ def train_teacher(seed_value=42, mark_version="mark2.1.2"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mark_version", type=str, default="mark2.1.2")
+    parser.add_argument("--mark_version", type=str, default="mark2.1.3")
     args = parser.parse_args()
     train_teacher(seed_value=42, mark_version=args.mark_version)

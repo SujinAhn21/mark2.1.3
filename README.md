@@ -1,7 +1,7 @@
-# mark2.1.2 - Audio Classification based on ViLD-inspired Architecture
+# mark2.1.3 - Audio Classification based on ViLD-inspired Architecture
 
 # Overview
-▪ The mark2.1.2 project is a ViLD-inspired audio classification model developed to distinguish impact (thumping) noise from other environmental sounds, particularly for applications such as inter-floor noise monitoring. The model leverages a two-stage architecture (teacher-student) where the teacher uses embedding similarity, and the student is trained via supervised learning.
+▪ The mark2.1.3 project is a ViLD-inspired audio classification model developed to distinguish impact (thumping) noise from other environmental sounds, particularly for applications such as inter-floor noise monitoring. The model leverages a two-stage architecture (teacher-student) where the teacher uses embedding similarity, and the student is trained via supervised learning.
 
 ▪ Initially, the model was built with a semi-supervised approach using soft labels derived from cosine similarity between audio and text embeddings. However, the architecture evolved toward a hard label-based supervised model due to issues with soft label ambiguity.
 

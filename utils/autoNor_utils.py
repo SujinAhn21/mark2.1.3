@@ -23,7 +23,7 @@ def normalize_label(label: str) -> str:
         if label in aliases:
             return normalized
 
-    print(f"[normalize_label Warning] Unknown label encountered: '{label}' → fallback to original.")
+    print(f"[normalize_label Warning] Unknown label encountered: '{label}' -> fallback to original.")
     return label
 
 

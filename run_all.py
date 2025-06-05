@@ -8,7 +8,7 @@ import argparse
 
 # ===== 파라미터 설정 =====
 parser = argparse.ArgumentParser()
-parser.add_argument("--mark_version", type=str, default="mark2.1.2", help="실행할 모델 버전")
+parser.add_argument("--mark_version", type=str, default="mark2.1.3", help="실행할 모델 버전")
 args = parser.parse_args()
 mark_version = args.mark_version
 
@@ -67,8 +67,8 @@ def run_subprocess(command_list):
 
 # ===== 단계별 실행 함수 정의 =====
 @timed_step
-def run_step0():
-    return run_subprocess(["python", "convert_m4a_to_wav.py", "--mark_version", mark_version])
+def run_step0(): # 이 부분 수정
+    return run_subprocess(["python", "fix_audio_length_to_240000.py", "--mark_version", mark_version])
 
 @timed_step
 def run_step1():
@@ -98,7 +98,7 @@ def run_step6():
 if __name__ == "__main__":
     logging.info("=== 소음 분류 전체 학습 파이프라인 시작 ===")
     logging.info(f"모델 버전: {mark_version}")
-    logging.info("현재 모델은 soft label → hard label 전환 후 CrossEntropyLoss 기반으로 학습됩니다.")
+    logging.info("현재 모델은 soft label -> hard label 전환 후 CrossEntropyLoss 기반으로 학습됩니다.")
 
     steps = [run_step0, run_step1, run_step2, run_step3, run_step4, run_step5, run_step6]
     for step in steps:

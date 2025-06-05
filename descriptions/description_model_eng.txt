@@ -69,7 +69,7 @@ mark 2.4: Everyday noise (speech/chatter) vs. Others
 * Overfitting was greatly reduced, and early stopping functioned effectively for stable training
 
 7. Current Structure and Summary
-   The current mark2.1.2 model utilizes a teacher with text-based audio classification and a student trained via supervised learning with hard labels. In future iterations, we plan to explore semi-supervised learning again through techniques such as pseudo-labeling and consistency training. The current structure serves as the optimized baseline for upcoming experiments.
+   The current mark2.1.3 model utilizes a teacher with text-based audio classification and a student trained via supervised learning with hard labels. In future iterations, we plan to explore semi-supervised learning again through techniques such as pseudo-labeling and consistency training. The current structure serves as the optimized baseline for upcoming experiments.
 
 The unlabeled data currently excluded from training are safely ignored by the normalize_label() function and will be archived for future mark3 development.
 

@@ -25,7 +25,7 @@ def get_filename_keyword_map_for_version(config: AudioViLDConfig):
     unlabeled = config.unlabeled_class_identifier
 
     keyword_map = {
-        "mark2.1.2": {
+        "mark2.1.3": {
             "thumping": labeled[0],
             "others": labeled[1],
             "unlabeled": unlabeled

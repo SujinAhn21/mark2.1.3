@@ -15,7 +15,7 @@ from vild_config import AudioViLDConfig
 from autoNor_utils import normalize_label
 from vild_parser_student import AudioParser  # 학생 파서에서 세그먼트 수 가져옴
 
-def extract_hard_labels(mark_version="mark2.1.2"):
+def extract_hard_labels(mark_version="mark2.1.3"):
     config = AudioViLDConfig(mark_version=mark_version)
     csv_path = os.path.join(BASE_DIR, f"dataset_index_{mark_version}.csv")
 
@@ -63,6 +63,6 @@ def extract_hard_labels(mark_version="mark2.1.2"):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mark_version', type=str, default="mark2.1.2")
+    parser.add_argument('--mark_version', type=str, default="mark2.1.3")
     args = parser.parse_args()
     exit(extract_hard_labels(mark_version=args.mark_version))

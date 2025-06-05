@@ -101,7 +101,7 @@ class AudioParser:
         except Exception as e:
             print(f"[Parser] concat error ({file_path}): {e}")
             for i, t in enumerate(segments):
-                print(f"  Segment {i} → shape: {getattr(t, 'shape', None)}")
+                print(f"  Segment {i} -> shape: {getattr(t, 'shape', None)}")
             raise
 
         label_idx = self.config.get_class_index(label_text)

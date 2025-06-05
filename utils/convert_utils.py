@@ -4,11 +4,15 @@ import glob
 import shutil
 from pydub import AudioSegment
 
-AudioSegment.converter = "C:/ffmpeg-2025-05-05-git-f4e72eb5a3-full_build/bin/ffmpeg.exe"
-AudioSegment.ffprobe   = "C:/ffmpeg-2025-05-05-git-f4e72eb5a3-full_build/bin/ffprobe.exe"
+'''colab에는 ffmpeg가 이미 PATH에 있으므로 설정 주석처리'''
+# AudioSegment.converter = "C:/ffmpeg-2025-05-05-git-f4e72eb5a3-full_build/bin/ffmpeg.exe"
+# AudioSegment.ffprobe   = "C:/ffmpeg-2025-05-05-git-f4e72eb5a3-full_build/bin/ffprobe.exe"
+'''colab에서는 gg drive 마운트 후 drive/MyDrive/mark2.2.0 경로 사용'''
+# input_dir="C:/Users/user/Desktop/AI_model/mark2.2.0/data"
+# output_dir="C:/Users/user/Desktop/AI_model/mark2.2.0/data_wav"
 
-def process_audio_files(input_dir="C:/Users/user/Desktop/AI_model/mark2.1.2/data",
-                        output_dir="C:/Users/user/Desktop/AI_model/mark2.1.2/data_wav"):
+def process_audio_files(input_dir="C:/Users/user/Desktop/AI_model/mark2.1.3/data",
+                        output_dir="C:/Users/user/Desktop/AI_model/mark2.1.3/data_wav"):
     os.makedirs(output_dir, exist_ok=True)
     print(f"출력 폴더 '{output_dir}'가 준비되었습니다.")
     print(f"입력 폴더: '{input_dir}'") # 입력 폴더 경로 확인

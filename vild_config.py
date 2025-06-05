@@ -5,11 +5,11 @@ from sentence_transformers import SentenceTransformer
 import os
 
 class AudioViLDConfig:
-    def __init__(self, mark_version="mark2.1.2"):
+    def __init__(self, mark_version="mark2.1.3"):
         self.mark_version = mark_version
 
         # === 클래스 설정 ===
-        if self.mark_version == "mark2.1.2":
+        if self.mark_version == "mark2.1.3":
             self.classes = ["thumping", "others"]
         elif self.mark_version == "mark2.2":
             self.classes = ["water", "others"]
@@ -20,7 +20,7 @@ class AudioViLDConfig:
         else:
             raise ValueError(
                 f"[Error] Unknown or unsupported mark_version: '{self.mark_version}'.\n"
-                f"지원되는 값: ['mark2.1.2', 'mark2.2', 'mark2.3', 'mark2.4']"
+                f"지원되는 값: ['mark2.1.3', 'mark2.2', 'mark2.3', 'mark2.4']"
             )
 
         self.labeled_classes = self.classes
@@ -47,13 +47,13 @@ class AudioViLDConfig:
 
         # === 학습 파라미터 ===
         self.batch_size = 16
-        self.num_epochs = 100
+        self.num_epochs = 80 # 100에서 80으로 줄임
         self.learning_rate = 1e-4
 
         self.text_loss_weight = 1.0
         self.image_loss_weight = 1.0
 
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device = "cuda" if torch.cuda.is_available() else "cpu" # 코랩에서 gpu 쓰기
 
         # === 데이터 경로 ===
         self.audio_dir = os.path.join("data_wav")  # mark_version 별 하위 폴더화 가능
@@ -69,7 +69,7 @@ class AudioViLDConfig:
         else:
             raise ValueError(
                 f"[Config Error] '{class_name}'는 mark_version '{self.mark_version}'에 등록되지 않은 클래스입니다.\n"
-                f"→ 현재 사용 가능한 클래스: {self.labeled_classes}"
+                f"=> 현재 사용 가능한 클래스: {self.labeled_classes}"
             )
 
     def get_classes_for_text_prompts(self) -> list:

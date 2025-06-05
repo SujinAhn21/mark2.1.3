@@ -24,7 +24,7 @@ def prepare_teacher_embedding(embedding: torch.Tensor, device: torch.device) -> 
     original_shape = embedding.shape
 
     if embedding.dim() > 2:
-        embedding = embedding.view(-1)  # 다차원 → 1D 평탄화
+        embedding = embedding.view(-1)  # 다차원 -> 1D 평탄화
         logging.info(f"Flattened teacher embedding from {original_shape} to {embedding.shape}")
     elif embedding.dim() == 2 and embedding.shape[0] == 1:
         embedding = embedding.squeeze(0)

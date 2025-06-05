@@ -39,7 +39,7 @@ def load_audio_file(file_path, target_sample_rate, resampler_cache=None):
     # 모노 변환
     if waveform.ndim > 1:
         try:
-            waveform = waveform.mean(dim=1)  # (채널, 샘플 수) → 모노
+            waveform = waveform.mean(dim=1)  # (채널, 샘플 수) -> 모노
         except Exception as e:
             logging.error(f"[Mono Fail] 다채널 평균화 실패: {file_path_norm} -> {e}")
             return None
@@ -69,7 +69,7 @@ def load_audio_file(file_path, target_sample_rate, resampler_cache=None):
             waveform = resampler(waveform)
 
         except Exception as e:
-            logging.error(f"[Resample Fail] {file_path_norm} (sr: {sr} → {target_sample_rate}, shape: {waveform.shape}) -> {e}")
+            logging.error(f"[Resample Fail] {file_path_norm} (sr: {sr} -> {target_sample_rate}, shape: {waveform.shape}) -> {e}")
             return None
 
     return waveform

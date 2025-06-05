@@ -7,7 +7,7 @@
 import os
 import torch
 
-def convert_teacher_checkpoint(mark_version="mark2.1.2"):
+def convert_teacher_checkpoint(mark_version="mark2.1.3"):
     encoder_path = f"best_teacher_encoder_{mark_version}.pth"
     classifier_path = f"best_teacher_classifier_{mark_version}.pth"
     output_path = f"teacher_checkpoint_{mark_version}.pt"
@@ -29,4 +29,4 @@ def convert_teacher_checkpoint(mark_version="mark2.1.2"):
 
 
 if __name__ == "__main__":
-    convert_teacher_checkpoint(mark_version="mark2.1.2")
+    convert_teacher_checkpoint(mark_version="mark2.1.3")

@@ -65,7 +65,7 @@ def collate_fn(batch):
     return torch.stack(mel_list), torch.stack(label_list)  # [B, K, 1, 64, 101], [B, K]
 
 
-def train_student(seed_value=42, mark_version="mark2.1.2"):
+def train_student(seed_value=42, mark_version="mark2.1.3"):
     set_seed(seed_value)
     config = AudioViLDConfig(mark_version=mark_version)
     global parser

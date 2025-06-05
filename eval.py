@@ -20,7 +20,7 @@ from vild_parser_student import AudioParser
 from seed_utils import set_seed
 
 
-def evaluate(audio_label_list, seed_value=42, mark_version="mark2.1.2"):
+def evaluate(audio_label_list, seed_value=42, mark_version="mark2.1.3"):
     set_seed(seed_value)
     config = AudioViLDConfig(mark_version=mark_version)
     parser = AudioParser(config)
@@ -145,7 +145,7 @@ def evaluate(audio_label_list, seed_value=42, mark_version="mark2.1.2"):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mark_version', type=str, default="mark2.1.2")
+    parser.add_argument('--mark_version', type=str, default="mark2.1.3")
     args = parser.parse_args()
 
     config = AudioViLDConfig(mark_version=args.mark_version)

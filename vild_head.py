@@ -9,7 +9,7 @@ class ViLDHead(nn.Module):
     Student 모델의 region embedding을 텍스트 임베딩 공간과 동일한 차원으로 투영(projection)하는 헤드
 
     - CrossEntropyLoss 기반 분류용으로 cosine 정규화는 제거함
-    - 구조: Linear → LayerNorm → ReLU
+    - 구조: Linear -> LayerNorm -> ReLU
     """
 
     def __init__(self, input_dim, output_dim):

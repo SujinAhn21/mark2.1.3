@@ -69,7 +69,7 @@ def plot_mel_spectrogram(waveform, sr, filename, save_dir, config, mark_version)
         print(f"[Error] Mel spectrogram 시각화 실패: {e}")
         return "Mel plot failed"
 
-def plot_waveform_and_mel(path, save_dir=None, seed_value=42, mark_version="mark2.1.2"):
+def plot_waveform_and_mel(path, save_dir=None, seed_value=42, mark_version="mark2.1.3"):
     set_seed(seed_value)
 
     # 저장 경로 설정
