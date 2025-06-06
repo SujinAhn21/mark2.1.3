@@ -1,4 +1,5 @@
 # student_train.py (CrossEntropyLoss 기반)
+'''세그먼트 수 불일치 해결을 위한 collect_fn 함수 수정'''
 
 import os
 import sys
@@ -11,7 +12,7 @@ from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
-import functools # 답답해서 로그 강제 출력..
+import functools # 답답해서 로그 강제 출력.. 왜 강제 출력해도 어디서 실행하든 출력이 한번에 와다다 나올까?
 print = functools.partial(print, flush = True)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -38,6 +39,13 @@ def load_hard_labels(config, mark_version):
         samples.append((file_path, labels))
     return samples
 
+'''
+<<세그먼트 수 불일치 해결>>
+- 최대 K 값 계산
+- 세그먼트 수 불일치 해결: 부족시 zero padding.
+=> 실험 일관성 유지(제발 이게 마지막이었으면..)
+
+'''
 
 def collate_fn(batch):
     mel_list, label_list = [], []
@@ -47,25 +55,46 @@ def collate_fn(batch):
         if not segments:
             continue
 
-        normed_segments = [normalize_mel_shape(seg) for seg in segments if normalize_mel_shape(seg) is not None]
-
-        if len(normed_segments) < label_tensor.shape[0]:
-            print(f"[Skip] 유효 segment 부족 ({len(normed_segments)} < {label_tensor.shape[0]}): {path}")
+        normed_segments = []
+        for seg in segments: 
+            normed = normalize_mel_shape(seg)
+            if normed is not None:
+                normed_segments.append(normed)
+        
+        if len(normed_segments) == 0:
             continue
-        elif len(normed_segments) > label_tensor.shape[0]:
-            normed_segments = normed_segments[:label_tensor.shape[0]]
-
+        
         mel_tensor = torch.stack(normed_segments)  # [K, 1, 64, 101]
         mel_list.append(mel_tensor)
         label_list.append(label_tensor)
-
+        
     if not mel_list:
         return torch.empty(0), torch.empty(0)
-
+        
+    # (1) 모든 샘플 중 최대 K를 계산
+    max_k = max(mel.shape[0] for mel in mel_list)
+        
+    # (2) K 맞추기: 부족하면 zero-padding 추가
+    for i in range(len(mel_list)):
+        mel = mel_list[i]
+        label = label_list[i]
+            
+        cur_k = mel.shape[0]
+        if cur_k < max_k:
+            pad = torch.zeros((max_k - cur_k, 1, 64, 101))
+            mel_list[i] = torch.cat([mel, pad], dim=0)
+                
+            label_pad = torch.full((max_k - cur_k,), -1, dtype=torch.long) # -1은 ignore_index로 추론 제외 가능
+            label_list[i] = torch.cat([label, label_pad], dim=0)
+        
+        elif cur_k > max_k:
+            mel_list[i] = mel[:max_k]
+            label_list[i] = label[:max_k]
+           
     return torch.stack(mel_list), torch.stack(label_list)  # [B, K, 1, 64, 101], [B, K]
 
 
-def train_student(seed_value=42, mark_version="mark2.1.3"):
+def train_student(seed_value=42, mark_version="mark2.1.3"):  # 버전 따라 수정 
     set_seed(seed_value)
     config = AudioViLDConfig(mark_version=mark_version)
     global parser
@@ -87,7 +116,8 @@ def train_student(seed_value=42, mark_version="mark2.1.3"):
     head = ViLDHead(config.embedding_dim, len(config.classes)).to(device)
     model = nn.Sequential(encoder, nn.Flatten(start_dim=1), head).to(device)
 
-    criterion = nn.CrossEntropyLoss()
+    # criterion = nn.CrossEntropyLoss() 
+    criterion = nn.CrossEntropyLoss(ignore_index=-1) # 수정. 원래 기본적으로 ignore_index가 -100이지만, 직관성을 위해.
     optimizer = optim.Adam(model.parameters(), lr=config.learning_rate)
 
     best_val_loss = float("inf")
@@ -161,4 +191,5 @@ def train_student(seed_value=42, mark_version="mark2.1.3"):
 
 
 if __name__ == "__main__":
-    train_student()  
+    train_student()    
+
